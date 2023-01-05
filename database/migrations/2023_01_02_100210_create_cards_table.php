@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('filter_id');
             $table->text('html_code');
             $table->text('css_code');
+            $table->text('js_code');
             $table->string('credit')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected']);
             $table->timestamps();

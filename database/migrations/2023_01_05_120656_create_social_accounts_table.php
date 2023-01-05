@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        // 
-        Schema::table('cards', function (Blueprint $table) {
-            $table->text('js_code');
+        Schema::create('social_accounts', function (Blueprint $table) {
+            $table->integer('user_id');
+            $table->string('provider_user_id');
+            $table->string('provider');
+            $table->timestamps();
         });
     }
 
@@ -26,7 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
-
+        Schema::dropIfExists('social_accounts');
     }
 };
