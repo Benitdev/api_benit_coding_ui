@@ -6,7 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
+use Laravel\Passport\RefreshToken;
+use Laravel\Passport\Token;
 
 class AuthController extends Controller
 {
@@ -80,9 +81,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        // Auth::logout();
+        $request->user()->token()->revoke();
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully logged out',

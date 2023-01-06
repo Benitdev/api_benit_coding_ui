@@ -13,7 +13,6 @@ class SocialAccountService
         $account = SocialAccount::whereProvider($social)
             ->whereProviderUserId($providerUser->getId())
             ->first();
-
         if ($account) {
             return $account->user;
         } else {
@@ -31,6 +30,7 @@ class SocialAccountService
                     'name' => $providerUser->getName(),
                     'password' => $providerUser->getName(),
                     'role' => 'USER',
+                    'image' => $providerUser->getAvatar(),
                     'status' => 'ACTIVATED'
                 ]);
             }

@@ -19,9 +19,7 @@ class SocialAuthController extends Controller
     {
         $user = SocialAccountService::createOrGetUser(Socialite::driver($social)->stateless()->user(), $social);
         // auth()->login($user);
-        $access_token = $user->createToken('Login Token')->accessToken;
-        dd($access_token);
-        // return redirect('http://localhost:3000');
+        $access_token = $user->createToken('Login Social')->accessToken;
         return response()->json([
             'access_token' => $access_token
         ], 200);
