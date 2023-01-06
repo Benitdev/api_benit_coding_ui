@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\SocialAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,4 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function (Request $request) {
     return view('welcome');
+});
+
+Route::prefix('auth')->group(function () {
+    Route::controller(SocialAuthController::class)->group(function () {
+        Route::get('/redirect/{social}', 'redirect');
+        Route::get('/callback/{social}', 'callback');
+    });
 });

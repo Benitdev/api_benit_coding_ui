@@ -18,10 +18,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('title');
             $table->string('filter_id');
-            $table->string('html_code');
-            $table->string('css_code');
+            $table->text('html_code');
+            $table->text('css_code');
+            $table->text('js_code');
             $table->string('credit')->nullable();
-            $table->enum('status', ['pending', 'approved', 'disabled']);
+            $table->enum('status', ['pending', 'approved', 'rejected']);
             $table->timestamps();
         });
     }

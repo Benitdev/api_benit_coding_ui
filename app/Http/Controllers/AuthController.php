@@ -6,12 +6,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Passport\RefreshToken;
+use Laravel\Passport\Token;
 
 class AuthController extends Controller
 {
     //
     public function __construct()
     {
+
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
     public function login(Request $request)
@@ -21,7 +24,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
         $credentials = $request->only('email', 'password');
-        $token = Auth::attempt($credentials);
+        /*     $token = Auth::attempt($credentials);
         if (!$token) {
             if (!User::where('email', $credentials['email'])->first())
                 return response()->json([
@@ -34,16 +37,26 @@ class AuthController extends Controller
                     'message' => 'Password incorrect',
                 ], 401);
         }
-
-        $user = Auth::user();
-        return response()->json([
-            'status' => 'success',
+ */
+        // $user = Auth::user();
+        $data = [
+            'grant_type' => 'password',
+            'client_id' => '9826f2c4-dc55-4c87-b7e6-b23aabd9f199',
+            'client_secret' => 'b4BhfQtY2goAa2GnjeoWKTnw1qf4sfLfWy3MIIyc',
+            'username' => $credentials['email'],
+            'password' => $credentials['password'],
+            'scope' => '',
+        ];
+        $response = Request::create('/oauth/token', 'POST', $data);
+        return app()->handle($response);
+        /* return response()->json([
+            'status' => 'success',  
             'user' => $user,
             'authorization' => [
                 'token' => $token,
                 'type' => 'bearer',
             ]
-        ]);
+        ]); */
     }
 
     public function register(Request $request)
@@ -58,23 +71,19 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'USER',
+            'status' => 'ACTIVATED'
         ]);
 
-        $token = Auth::login($user);
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',
-            'user' => $user,
-            'authorization' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
         ]);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::logout();
+        $request->user()->token()->revoke();
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully logged out',
