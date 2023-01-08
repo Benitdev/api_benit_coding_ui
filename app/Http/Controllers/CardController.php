@@ -31,7 +31,7 @@ class CardController extends Controller
         $cards = Card::select('cards.*', 'filters.filter_name')
             ->join('filters', 'filter_id', '=', 'filters.id')
             ->where($queries)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('updated_at', 'desc')
             ->paginate(3);
         return response()->json([
             'status' => 'success',
@@ -69,10 +69,11 @@ class CardController extends Controller
     public function store(Request $request)
     {
         //
-        $postData = $request->all();
-        $postData['status'] = 'pending';
+        $cardData = $request->all();
+        if (empty($cardData['status']))
+            $cardData['status'] = 'pending';
         try {
-            $card = Card::create($postData);
+            $card = Card::create($cardData);
             return response()->json([
                 'status' => 'success',
                 'card' => $card
@@ -109,12 +110,24 @@ class CardController extends Controller
         $card = Card::where('id', $id)->update($postData);
         return response()->json([
             'status' => 'success',
-        ], 201);
+        ], 200);
     }
 
 
     public function destroy($id)
     {
         //
+        try {
+            $card = Card::find($id);
+            $card->delete();
+            return response()->json([
+                'status' => 'success',
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e
+            ], 500);
+        }
     }
 }

@@ -37,10 +37,12 @@ Route::prefix('cards')->group(function () {
         Route::get('/{card}', 'show');
         Route::post('/add-card', 'store');
         Route::put('/edit-card/{id}', 'update');
+        Route::delete('/delete-card/{id}', 'destroy');
     });
 });
 Route::prefix('filter')->group(function () {
     Route::controller(FilterController::class)->group(function () {
         Route::get('/', 'index');
+        Route::post('/add-filter', 'store');
     });
 });

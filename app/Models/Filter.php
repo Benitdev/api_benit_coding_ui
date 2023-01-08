@@ -10,5 +10,6 @@ class Filter extends Model
     use HasFactory;
     protected $fillable = [
         'filter_name',
+        'status'
     ];
 }
