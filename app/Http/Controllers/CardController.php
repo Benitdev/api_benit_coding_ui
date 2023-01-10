@@ -117,4 +117,8 @@ class CardController extends Controller
     {
         //
     }
+    public function remote($id)
+    {
+        //
+    }
 }
